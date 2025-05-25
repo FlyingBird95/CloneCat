@@ -8,83 +8,94 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Install uv
-      uses: astral-sh/setup-uv@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
 
-    - name: Set up Python
-      run: uv python install
+      - name: Set up Python
+        run: uv python install
 
-    - name: Install dependencies
-      run: uv sync --all-extras --dev
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
 
-    - name: Run tests
-      run: uv run pytest
+      - name: Run tests
+        run: uv run pytest
 
-    - name: Build package
-      run: uv build
+      - name: Build package
+        run: uv build
 
-    - name: Check package
-      run: |
-        uv add --dev twine
-        uv run twine check dist/*
+      - name: Check package
+        run: |
+          uv add --dev twine
+          uv run twine check dist/*
 
   publish-test:
     needs: test
     runs-on: ubuntu-latest
     environment: test-pypi
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Install uv
-      uses: astral-sh/setup-uv@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
 
-    - name: Set up Python
-      run: uv python install
+      - name: Set up Python
+        run: uv python install
 
-    - name: Install dependencies
-      run: uv sync --dev
+      - name: Install dependencies
+        run: uv sync --dev
 
-    - name: Build package
-      run: uv build
+      - name: Build package
+        run: uv build
 
-    - name: Publish to TestPyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        repository-url: https://test.pypi.org/legacy/
-        password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-        skip-existing: true
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          skip-existing: true
 
   publish-prod:
     needs: publish-test
     runs-on: ubuntu-latest
     environment: production
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Install uv
-      uses: astral-sh/setup-uv@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
 
-    - name: Set up Python
-      run: uv python install
+      - name: Set up Python
+        run: uv python install
 
-    - name: Install dependencies
-      run: uv sync --dev
+      - name: Install dependencies
+        run: uv sync --dev
 
-    - name: Build package
-      run: uv build
+      - name: Build package
+        run: uv build
 
-    - name: Publish to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        password: ${{ secrets.PYPI_API_TOKEN }}
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
 
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v2
-      with:
-        files: dist/*
-        generate_release_notes: true
+      - name: Extract version from twinly/__init__.py
+        id: get_version
+        run: |
+          VERSION=$(sed -nE 's/^__version__ *= *"([^"]+)"/\1/p' twinly/__init__.py)
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Create tag
+        run: |
+          git tag -a "v${{ env.VERSION }}" -m "Release v${{ env.VERSION }}"
+          git push origin "v${{ env.VERSION }}"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
