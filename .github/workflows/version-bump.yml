@@ -44,7 +44,7 @@ jobs:
 
     - name: Bump version
       run: |
-        uv run bump2version ${{ steps.bump-type.outputs.bump_type }} --verbose
+        uv run bump2version ${{ steps.bump-type.outputs.bump_type }} --allow-dirty --verbose
 
     - name: Push changes
       run: |
