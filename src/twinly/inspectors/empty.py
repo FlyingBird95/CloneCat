@@ -9,5 +9,5 @@ class EmptyInspector(Inspector):
         """Validate whether class attributes are defined properly."""
 
     @property
-    def all_twin_attributes(self) -> set[Attribute]:
+    def all_twinly_attributes(self) -> set[Attribute]:
         return set()

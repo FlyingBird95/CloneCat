@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import TypeVar
 
 from ..attributes import Attribute
-from ..twin import Twin
+from ..twinly import Twinly
 
 AttributeType = TypeVar("AttributeType", bound=Attribute)
 
@@ -13,7 +13,7 @@ class Inspector(ABC):
     This is an internal utility class, and not intended to be used outside this package.
     """
 
-    def __init__(self, class_to_inspect: type[Twin]):
+    def __init__(self, class_to_inspect: type[Twinly]):
         self.meta_class = class_to_inspect.Meta
 
     @abstractmethod
@@ -22,5 +22,5 @@ class Inspector(ABC):
 
     @property
     @abstractmethod
-    def all_twin_attributes(self) -> set[Attribute]:
-        """Returns all twin attributes."""
+    def all_twinly_attributes(self) -> set[Attribute]:
+        """Returns all twinly attributes."""

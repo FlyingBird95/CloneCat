@@ -2,12 +2,12 @@ import typing
 
 from .import_helper import import_copy_cat_class
 from .inspectors.empty import EmptyInspector
-from .registry import TwinRegistry
-from .twin import Twin
+from .registry import TwinlyRegistry
+from .twinly import Twinly
 from .utils import Entity
 
 
-class Optional(Twin):
+class Optional(Twinly):
     """Class for cloning optional instances.
 
     When the instance is None, then Optional.clone(...) returns None.
@@ -16,13 +16,13 @@ class Optional(Twin):
 
     Usage:
     1. Use directly:
-        some_attribute = Clone(Optional(SomeTwinClass))
+        some_attribute = Clone(Optional(SomeTwinlyClass))
     2. When imports cannot be done directly, a creator function may also be passed:
-        def get_some_twin_class():
-             return SomeTwinClass
-        some_attribute = Clone(Optional(get_some_twin_class))
+        def get_some_twinly_class():
+             return SomeTwinlyClass
+        some_attribute = Clone(Optional(get_some_twinly_class))
     3. With a string location to a class (useful for solving circular imports):
-        some_attribute = Clone(Optional("your_package.SomeTwinClass"))
+        some_attribute = Clone(Optional("your_package.SomeTwinlyClass"))
     """
 
     inspector_class = EmptyInspector
@@ -30,7 +30,7 @@ class Optional(Twin):
     class Meta:
         model = None
 
-    def __init__(self, inner_class: typing.Union[type[Twin], Twin, str]):
+    def __init__(self, inner_class: typing.Union[type[Twinly], Twinly, str]):
         self._inner_class = inner_class
 
     @property
@@ -40,7 +40,7 @@ class Optional(Twin):
 
         return self._inner_class
 
-    def validate(self, obj_to_copy: typing.Optional[Twin]) -> None:
+    def validate(self, obj_to_copy: typing.Optional[Twinly]) -> None:
         if not self.is_correct_type(obj_to_copy):
             raise ValueError(
                 f"Expected instance to be None or of type {obj_to_copy.__class__}, "
@@ -51,7 +51,7 @@ class Optional(Twin):
         return obj_to_copy is None or self.inner_class.is_correct_type(obj_to_copy)
 
     def clone(
-        self, obj_to_copy: typing.Optional[Entity], registry: TwinRegistry
+        self, obj_to_copy: typing.Optional[Entity], registry: TwinlyRegistry
     ) -> typing.Optional[Entity]:
         self.validate(obj_to_copy)
         if obj_to_copy is None:
@@ -60,7 +60,7 @@ class Optional(Twin):
         return self.inner_class.clone(obj_to_copy, registry)
 
 
-class List(Twin):
+class List(Twinly):
     """Class for cloning a list of instances.
 
     When an instance in the list is already copied,
@@ -68,11 +68,11 @@ class List(Twin):
 
     Usage:
     1. Use directly with a class:
-        some_attribute = Clone(List(SomeTwinClass))
+        some_attribute = Clone(List(SomeTwinlyClass))
     2. Use directly with an instance:
-        some_attribute = Clone(List(Optional(SomeTwinClass)))
+        some_attribute = Clone(List(Optional(SomeTwinlyClass)))
     3. With a string location to a class (useful for solving circular imports):
-        some_attribute = Clone(List("your_package.SomeTwinClass"))
+        some_attribute = Clone(List("your_package.SomeTwinlyClass"))
     """
 
     inspector_class = EmptyInspector
@@ -80,7 +80,7 @@ class List(Twin):
     class Meta:
         model = list
 
-    def __init__(self, inner_class: typing.Union[Twin, type[Twin], str]):
+    def __init__(self, inner_class: typing.Union[Twinly, type[Twinly], str]):
         self._inner_class = inner_class
 
     @property
@@ -89,12 +89,14 @@ class List(Twin):
             return import_copy_cat_class(self._inner_class)
         return self._inner_class
 
-    def clone(self, obj_to_copy: list[Entity], registry: TwinRegistry) -> list[Entity]:
+    def clone(
+        self, obj_to_copy: list[Entity], registry: TwinlyRegistry
+    ) -> list[Entity]:
         self.validate(obj_to_copy)
         return [self.inner_class.clone(obj, registry) for obj in obj_to_copy]
 
 
-class Set(Twin):
+class Set(Twinly):
     """Class for cloning a set of instances.
 
     When an instance in the set is already copied,
@@ -102,11 +104,11 @@ class Set(Twin):
 
     Usage:
     1. Use directly with a class:
-        some_attribute = Clone(Set(SomeTwinClass))
+        some_attribute = Clone(Set(SomeTwinlyClass))
     2. Use directly with an instance:
-        some_attribute = Clone(Set(Optional(SomeTwinClass)))
+        some_attribute = Clone(Set(Optional(SomeTwinlyClass)))
     3. With a string location to a class (useful for solving circular imports):
-        some_attribute = Clone(Set("your_package.SomeTwinClass"))
+        some_attribute = Clone(Set("your_package.SomeTwinlyClass"))
     """
 
     inspector_class = EmptyInspector
@@ -114,7 +116,7 @@ class Set(Twin):
     class Meta:
         model = set
 
-    def __init__(self, inner_class: typing.Union[Twin, type[Twin], str]):
+    def __init__(self, inner_class: typing.Union[Twinly, type[Twinly], str]):
         self._inner_class = inner_class
 
     @property
@@ -123,12 +125,12 @@ class Set(Twin):
             return import_copy_cat_class(self._inner_class)
         return self._inner_class
 
-    def clone(self, obj_to_copy: set[Entity], registry: TwinRegistry) -> set[Entity]:
+    def clone(self, obj_to_copy: set[Entity], registry: TwinlyRegistry) -> set[Entity]:
         self.validate(obj_to_copy)
         return {self.inner_class.clone(obj, registry) for obj in obj_to_copy}
 
 
-class OneOf(Twin):
+class OneOf(Twinly):
     """Class for cloning union types.
 
     An instance to be copied must be an instance of the classes
@@ -146,7 +148,7 @@ class OneOf(Twin):
     class Meta:
         model = None
 
-    def __init__(self, *inner_classes: typing.Union[type[Twin], str]):
+    def __init__(self, *inner_classes: typing.Union[type[Twinly], str]):
         super().__init__()
         self._inner_classes = inner_classes
 
@@ -176,7 +178,7 @@ class OneOf(Twin):
                 f"got {type(obj_to_copy)}"
             )
 
-    def clone(self, obj_to_copy: Entity, registry: TwinRegistry) -> Entity:
+    def clone(self, obj_to_copy: Entity, registry: TwinlyRegistry) -> Entity:
         self.validate(obj_to_copy)
 
         try:

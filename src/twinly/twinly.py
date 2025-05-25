@@ -2,11 +2,11 @@ from abc import ABC, abstractmethod
 from typing import Generic, Type
 
 from .attributes import Copy, Ignore
-from .registry import TwinRegistry
+from .registry import TwinlyRegistry
 from .utils import NOT_SET, Entity
 
 
-class Twin(Generic[Entity], ABC):
+class Twinly(Generic[Entity], ABC):
     """Base class for copying SQLAlchemy models.
 
     This class is not supposed to be instantiated directly.
@@ -14,13 +14,13 @@ class Twin(Generic[Entity], ABC):
 
     Usage:
 
-    class CopyFoo(Twin):
+    class CopyFoo(TwinLy):
         class Meta:
             model = Foo
             ignore = {Foo.first_attribute}
             copy = {Foo.second_attribute}
 
-        third_attribute = Clone(TwinclassForThirdAttribute)
+        third_attribute = Clone(TwinlyClassForThirdAttribute)
     """
 
     inspector_class = None
@@ -63,7 +63,7 @@ class Twin(Generic[Entity], ABC):
         return isinstance(obj_to_copy, cls.Meta.model)
 
     @classmethod
-    def clone(cls, obj_to_copy: Entity, registry: TwinRegistry) -> Entity:
+    def clone(cls, obj_to_copy: Entity, registry: TwinlyRegistry) -> Entity:
         """Copies the instance."""
         cls.validate(obj_to_copy)
 
@@ -74,7 +74,7 @@ class Twin(Generic[Entity], ABC):
         registry[obj_to_copy] = new_obj
 
         # Copy attributes
-        for attr in cls.inspector.all_twin_attributes:
+        for attr in cls.inspector.all_twinly_attributes:
             new_value = attr.get_value(obj_to_copy, registry)
             if new_value is not NOT_SET:
                 setattr(new_obj, attr.name, new_value)

@@ -1,7 +1,7 @@
 [project]
-name = "twin"
+name = "twinly"
 dynamic = ["version"]
-description = "Twin is a Python library that creates perfect copies of your objects along with all their relationships. "
+description = "Twinly is a Python library that creates perfect copies of your objects along with all their relationships. "
 readme = "README.md"
 authors = [
     { name = "Patrick" }
@@ -23,9 +23,6 @@ classifiers = [
     "Topic :: Utilities",
 ]
 
-[project.scripts]
-twin = "twin:main"
-
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
@@ -45,16 +42,16 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/FlyingBird95/twin"
-Documentation = "https://github.com/FlyingBird95/twin#readme"
-Repository = "https://github.com/FlyingBird95/twin.git"
-"Bug Tracker" = "https://github.com/FlyingBird95/twin/issues"
+Homepage = "https://github.com/FlyingBird95/twinly"
+Documentation = "https://github.com/FlyingBird95/twinly#readme"
+Repository = "https://github.com/FlyingBird95/twinly.git"
+"Bug Tracker" = "https://github.com/FlyingBird95/twinly/issues"
 
 [tool.hatch.version]
-path = "src/twin/__init__.py"
+path = "src/twinly/__init__.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/twin"]
+packages = ["src/twinly"]
 
 [tool.black]
 line-length = 88
@@ -69,7 +66,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "--cov=twin --cov-report=term-missing"
+addopts = "--cov=twinly --cov-report=term-missing"
 
 [tool.mypy]
 python_version = "3.9"

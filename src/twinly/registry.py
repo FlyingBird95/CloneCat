@@ -1,7 +1,7 @@
-from telegram.ext.filters import Entity
+from .utils import Entity
 
 
-class TwinRegistry(dict):
+class TwinlyRegistry(dict):
     """Registry to add and retrieve entities.
 
     This registry is useful to retrieve newly created entities based on the old object.

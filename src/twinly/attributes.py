@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 from typing import Any, Callable, Generic, Optional, Union
 
 from .import_helper import import_copy_cat_class
-from .registry import TwinRegistry
-from .twin import Twin
+from .registry import TwinlyRegistry
+from .twinly import Twinly
 from .utils import NOT_SET, Entity
 
 
@@ -25,7 +25,7 @@ class Attribute(Generic[Entity], ABC):
         self.name = name
 
     @abstractmethod
-    def get_value(self, obj_to_copy: Entity, registry: TwinRegistry):
+    def get_value(self, obj_to_copy: Entity, registry: TwinlyRegistry):
         """Get the value"""
 
 
@@ -38,7 +38,7 @@ class Copy(Attribute):
         Book.title = Copy()
     """
 
-    def get_value(self, obj_to_copy: Entity, registry: TwinRegistry) -> Any:
+    def get_value(self, obj_to_copy: Entity, registry: TwinlyRegistry) -> Any:
         return getattr(obj_to_copy, self.name)
 
 
@@ -53,7 +53,7 @@ class Clone(Attribute):
 
     1. Use as a decorator:
         @Clone()
-        def author(self, registry: TwinRegistry):
+        def author(self, registry: TwinlyRegistry):
             ...
     2. Use as a class attribute using typing:
         author = Clone(CopyAuthor)
@@ -61,7 +61,7 @@ class Clone(Attribute):
         author = Clone(Optional(CopyAuthor))
     """
 
-    def __init__(self, inner_class: Union[type[Twin], Optional[Twin], str] = None):
+    def __init__(self, inner_class: Union[type[Twinly], Optional[Twinly], str] = None):
         super().__init__()
         self._inner_class = inner_class
         self.getter_function = None
@@ -72,7 +72,7 @@ class Clone(Attribute):
             return import_copy_cat_class(self._inner_class)
         return self._inner_class
 
-    def get_value(self, obj_to_copy, registry: TwinRegistry) -> None:
+    def get_value(self, obj_to_copy, registry: TwinlyRegistry) -> None:
         if self.inner_class is not None:
             obj_to_clone = getattr(obj_to_copy, self.name)
             return self.inner_class.clone(obj_to_clone, registry)
@@ -86,5 +86,5 @@ class Clone(Attribute):
 class Ignore(Attribute):
     """Use this class if you don't want to copy the attribute of the old object."""
 
-    def get_value(self, obj_to_copy: Entity, registry: TwinRegistry):
+    def get_value(self, obj_to_copy: Entity, registry: TwinlyRegistry):
         return NOT_SET

@@ -1,12 +1,12 @@
 from sqlalchemy import inspect
 
 from ..attributes import Attribute, Copy, Ignore
-from ..twin import Twin
+from ..twinly import Twinly
 from .base import AttributeType, Inspector
 
 
 def get_names(items: set[Attribute]) -> set[str]:
-    """Extract the names from a set of Twin attributes."""
+    """Extract the names from a set of Twinly attributes."""
     return {item.name for item in items}
 
 
@@ -21,7 +21,7 @@ def create_attribute(attr_class: type[AttributeType], name: str) -> AttributeTyp
 class ModelInspector(Inspector):
     """Model inspector class to extract the Attributes from an SQLAlchemy model."""
 
-    def __init__(self, class_to_inspect: type[Twin]):
+    def __init__(self, class_to_inspect: type[Twinly]):
         super().__init__(class_to_inspect)
         self.ignore_attributes: set[Ignore] = set()
         if hasattr(class_to_inspect.Meta, "ignore"):
@@ -142,7 +142,7 @@ class ModelInspector(Inspector):
 
         # Validate unknown attributes
         if (
-            unknown_attributes := get_names(self.all_twin_attributes)
+            unknown_attributes := get_names(self.all_twinly_attributes)
             - self.get_model_attributes()
         ):
             attributes = ", ".join(sorted(unknown_attributes))
@@ -150,7 +150,7 @@ class ModelInspector(Inspector):
 
         # Validate missing attributes
         if missing_attributes := self.get_model_attributes() - get_names(
-            self.all_twin_attributes
+            self.all_twinly_attributes
         ):
             attributes = ", ".join(sorted(missing_attributes))
             raise Exception(f"Missing attributes: {attributes}")
@@ -161,8 +161,8 @@ class ModelInspector(Inspector):
         return set(inspector.attrs.keys())
 
     @property
-    def all_twin_attributes(self) -> set[Attribute]:
-        """Returns all twin attributes."""
+    def all_twinly_attributes(self) -> set[Attribute]:
+        """Returns all twinly attributes."""
         return (
             self.copy_attributes
             | self.ignore_attributes
@@ -171,7 +171,7 @@ class ModelInspector(Inspector):
         )
 
 
-class TwinBase(Twin):
-    """Base class for Twin classes that copies SQLAlchemy objects."""
+class TwinlyModelBase(Twinly):
+    """Base class for Twinly classes that copies SQLAlchemy objects."""
 
     inspector_class = ModelInspector
