@@ -1,0 +1,51 @@
+name: Auto Version Bump
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'src/twin/__init__.py'  # Avoid infinite loops
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v2
+
+    - name: Set up Python
+      run: uv python install
+
+    - name: Install bump2version
+      run: uv add --dev bump2version
+
+    - name: Configure git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+    - name: Determine version bump type
+      id: bump-type
+      run: |
+        if [[ "${{ github.event.head_commit.message }}" == *"BREAKING CHANGE"* ]] || [[ "${{ github.event.head_commit.message }}" == *"major:"* ]]; then
+          echo "bump_type=major" >> $GITHUB_OUTPUT
+        elif [[ "${{ github.event.head_commit.message }}" == *"feat:"* ]] || [[ "${{ github.event.head_commit.message }}" == *"feature:"* ]]; then
+          echo "bump_type=minor" >> $GITHUB_OUTPUT
+        else
+          echo "bump_type=patch" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Bump version
+      run: |
+        uv run bump2version ${{ steps.bump-type.outputs.bump_type }} --verbose
+
+    - name: Push changes
+      run: |
+        git push origin main --tags
