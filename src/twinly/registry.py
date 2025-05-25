@@ -22,5 +22,6 @@ class TwinlyRegistry(dict):
 
         Raises an AssertionError if the new entity was already registered.
         """
-        assert key not in self, "Entity already registered"
+        if key in self:
+            raise ValueError(f"{key} is already registered")
         return super().__setitem__(key, value)
