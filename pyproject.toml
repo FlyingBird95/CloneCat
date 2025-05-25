@@ -39,6 +39,7 @@ dev = [
     "bump2version>=1.0",
     "safety>=2.0",
     "bandit>=1.7",
+    "sqlalchemy>=2.0.41",
 ]
 
 [project.urls]
@@ -48,10 +49,10 @@ Repository = "https://github.com/FlyingBird95/twinly.git"
 "Bug Tracker" = "https://github.com/FlyingBird95/twinly/issues"
 
 [tool.hatch.version]
-path = "src/twinly/__init__.py"
+path = "twinly/__init__.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/twinly"]
+packages = ["twinly"]
 
 [tool.black]
 line-length = 88

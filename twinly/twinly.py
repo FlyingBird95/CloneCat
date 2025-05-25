@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Generic, Type
+from typing import Any, Generic, Type
 
-from .attributes import Copy, Ignore
 from .registry import TwinlyRegistry
 from .utils import NOT_SET, Entity
 
@@ -29,9 +28,9 @@ class Twinly(Generic[Entity], ABC):
     class Meta:
         """Define the model that should be instantiated below."""
 
-        model: Type[Entity]  # type: ignore
-        ignore: set[Ignore] = set()
-        copy: set[Copy] = set()
+        model: Type[Entity] = NOT_SET  # type: ignore
+        ignore: set[Any] = set()
+        copy: set[Any] = set()
 
     def __init_subclass__(cls) -> None:
         super().__init_subclass__()
