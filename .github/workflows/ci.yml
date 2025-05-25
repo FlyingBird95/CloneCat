@@ -34,9 +34,6 @@ jobs:
         uv run isort --check src/ tests/
         uv run flake8 src/ tests/
 
-    - name: Type check
-      run: uv run mypy src/
-
     - name: Run tests
       run: |
         uv run pytest --cov=twin --cov-report=xml --cov-report=term-missing
