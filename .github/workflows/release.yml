@@ -35,7 +35,7 @@ jobs:
   publish-test:
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/develop'
     environment: test-pypi
     steps:
     - name: Checkout code
@@ -63,7 +63,7 @@ jobs:
   publish-prod:
     needs: publish-test
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: github.ref == 'refs/heads/main'
     environment: production
     steps:
     - name: Checkout code
