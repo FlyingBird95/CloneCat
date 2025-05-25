@@ -21,7 +21,7 @@ If applicable, add screenshots to help explain your problem.
 ## 🖥️ Environment
 - OS: [e.g. iOS]
 - Python Version: [e.g. 3.11]
-- Twin Version: [e.g. 0.1.0]
+- Twin Version: [e.g. 0.1.1]
 
 ## 📋 Additional Context
 Add any other context about the problem here.
