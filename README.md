@@ -1,30 +1,31 @@
-# 👯‍♀️ Twinly
+# 🐱➕🐱️CloneCat
 
-![CI](https://github.com/FlyingBird95/twinly/workflows/CI/badge.svg)
-![Release](https://github.com/FlyingBird95/twinly/workflows/Release/badge.svg)
-![PyPI version](https://badge.fury.io/py/twinly.svg)
-![Python versions](https://img.shields.io/pypi/pyversions/twinly.svg)
-![Downloads](https://pepy.tech/badge/twinly)
-![License](https://img.shields.io/github/license/FlyingBird95/twinly.svg)
-![Code coverage](https://codecov.io/gh/FlyingBird95/twinly/branch/main/graph/badge.svg)
+![CI](https://github.com/FlyingBird95/clonecat/workflows/CI/badge.svg)
+![Release](https://github.com/FlyingBird95/clonecat/workflows/Release/badge.svg)
+![PyPI version](https://badge.fury.io/py/clonecat.svg)
+![Python versions](https://img.shields.io/pypi/pyversions/clonecat.svg)
+![Downloads](https://pepy.tech/badge/clonecat)
+![License](https://img.shields.io/github/license/FlyingBird95/clonecat.svg)
+![Code coverage](https://codecov.io/gh/FlyingBird95/clonecat/branch/main/graph/badge.svg)
 
 > *"Two heads are better than one, but two objects are just right!"*
 
-**Twinly** is a Python library that creates perfect copies of your objects along with all their relationships.
+**CloneCat** is a Python framework that helps you create perfect clones
+of your objects along with all their relationships.
 Think `copy.deepcopy()` but with superpowers.
 
-## 🚀 Why Twinly?
+## 🚀 Why CloneCat?
 
 Ever tried to clone a complex object only to find that half its relationships went on vacation?
-Twinly keeps the family together!
+CloneCat keeps the family together!
 It's like a family reunion, but for your data structures.
 
-Twinly has a clear interface to determine which relations should be copied,
+CloneCat has a clear interface to determine which relations should be copied,
 which relations should be cloned,
 and which relations should be ignored.
 
-Additionally, Twinly has built in validation that verifies that all relations in a dataclass are specified.
-When any attribute is left out, its corresponding Twinly class cannot be used.
+Additionally, CloneCat has built in validation that verifies that all relations in a dataclass are specified.
+When any attribute is left out, its corresponding CloneCat class cannot be used.
 
 Twinly works great with:
 - [dataclasses](https://docs.python.org/3/library/dataclasses.html)
@@ -47,13 +48,13 @@ Twinly works great with:
 Using `uv` (because you're cool like that):
 
 ```bash
-uv add twinly
+uv add clonecat
 ```
 
 Or with pip (if you must):
 
 ```bash
-pip install twinly
+pip install clonecat
 ```
 
 ## 🎮 Quick Start
@@ -76,14 +77,16 @@ class Person:
 ```
 
 When a person must be cloned (don't try this at home),
-use the following `Twinly` class:
+use the following `CloneCat` class:
+
 ```python
-from twinly import Twinly
-from twinly.inspectors.dataclass import DataclassInspector
+from clonecat import CloneCat
+from clonecat.inspectors.dataclass import DataclassInspector
 
 
-class CopyPerson(Twinly):
+class ClonePerson(CloneCat):
     inspector_class = DataclassInspector
+
     class Meta:
         model = Person
         ignore = {"id"}
@@ -91,8 +94,8 @@ class CopyPerson(Twinly):
 ```
 
 Let's break down the snippet above into several chunks:
-- `class CopyPerson(Twinly)`: All copy classes must inherit from `Twinly`.
-- `inspector_class = DataclassInspector`: This tells `Twinly` how to interspect the dataclass, revealing its attributes.
+- `class ClonePerson(CloneCat)`: All copy classes must inherit from `CloneCat`.
+- `inspector_class = DataclassInspector`: This tells `CloneCat` how to interspect the dataclass, revealing its attributes.
 - `class Meta`: A `Meta`-class is required, with at least the `model`-parameter set.
 - `ignore = {"id"}`: Optionally: specify keys that should **NOT** be copied.
 - `copy = {"first_name", "last_name"}`: Optionally specify keys that should be copied.
@@ -101,10 +104,10 @@ Given an instance of `Person` (yes, also [Elon Musk is human](https://cleantechn
 
 ```python
 elon_musk = Person(first_name="Elon", last_name="Musk")
-elon_musk_clone = CopyPerson.clone(elon_musk, TwinlyRegistry())
+elon_musk_clone = ClonePerson.clone(elon_musk, CloneCatRegistry())
 ```
 
-Forgot to say, but `TwinlyRegistry()` can be used
+Forgot to say, but `CloneCatRegistry()` can be used
 to keep track which new instances are created out of the existing instances.
 It's nothing more than a glorified dictionary.
 
@@ -141,20 +144,24 @@ class Person:
     last_name: str
 ```
 
-And the corresponding `Twinly` models:
+And the corresponding `CloneCat` models:
 
 ```python
-from twinly import Twinly
-from twinly.inspectors.dataclass import DataclassInspector
+from clonecat import CloneCat
+from clonecat.inspectors.dataclass import DataclassInspector
 
-class CopyFood(Twinly):
+
+class CloneFood(CloneCat):
     inspector_class = DataclassInspector
+
     class Meta:
         model = Food
         copy = {"name"}
 
-class CopyPerson(Twinly):
+
+class ClonePerson(CloneCat):
     inspector_class = DataclassInspector
+
     class Meta:
         model = Person
         ignore = {"id"}
@@ -168,7 +175,7 @@ Now, it's time to show how this can be cloned:
 ```python
 pineapple_pizza = Food(name="Pineapple pizza")
 elon_musk = Person(first_name="Elon", last_name="Musk", favorite_food=pineapple_pizza)
-elon_musk_clone = CopyPerson.clone(elon_musk, TwinlyRegistry())
+elon_musk_clone = ClonePerson.clone(elon_musk, CloneCatRegistry())
 ```
 
 Trust, but verify:
@@ -209,7 +216,7 @@ uv run pytest
 With coverage:
 
 ```bash
-uv run pytest --cov=twinly --cov-report=html
+uv run pytest --cov=clonecat --cov-report=html
 ```
 
 ## 🤝 Contributing

@@ -1,7 +1,7 @@
 from .utils import Entity
 
 
-class TwinlyRegistry(dict):
+class CloneCatRegistry(dict):
     """Registry to add and retrieve entities.
 
     This registry is useful to retrieve newly created entities based on the old object.
@@ -12,7 +12,7 @@ class TwinlyRegistry(dict):
     book = Book()
     library = Library(books=[book, Book(recommended_by=book)])
 
-    When copying the library,
+    When cloning the library,
     the second newly created book should link to the first newly created book.
     This is possible using this registry.
     """

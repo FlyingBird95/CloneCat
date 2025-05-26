@@ -1,7 +1,7 @@
 from dataclasses import is_dataclass
 
-from twinly.attributes import Attribute
-from twinly.inspectors.base import Inspector
+from clonecat.attributes import Attribute
+from clonecat.inspectors.base import Inspector
 
 
 class DataclassInspector(Inspector):
@@ -12,7 +12,7 @@ class DataclassInspector(Inspector):
             raise ValueError(f"{self.meta_class.model} is not a dataclass.")
 
     @property
-    def all_twinly_attributes(self) -> set[Attribute]:
+    def all_clone_cat_attributes(self) -> set[Attribute]:
         return set()
 
     @staticmethod

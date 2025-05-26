@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import Any, Generic, Type
 
-from .registry import TwinlyRegistry
+from .registry import CloneCatRegistry
 from .utils import NOT_SET, Entity
 
 
-class Twinly(Generic[Entity], ABC):
+class CloneCat(Generic[Entity], ABC):
     """Base class for copying SQLAlchemy models.
 
     This class is not supposed to be instantiated directly.
@@ -13,13 +13,13 @@ class Twinly(Generic[Entity], ABC):
 
     Usage:
 
-    class CopyFoo(TwinLy):
+    class CloneFoo(CloneCat):
         class Meta:
             model = Foo
             ignore = {Foo.first_attribute}
             copy = {Foo.second_attribute}
 
-        third_attribute = Clone(TwinlyClassForThirdAttribute)
+        third_attribute = Clone(CloneCatClassForThirdAttribute)
     """
 
     inspector_class = None
@@ -51,22 +51,22 @@ class Twinly(Generic[Entity], ABC):
         cls.inspector.validate()
 
     @classmethod
-    def validate(cls, obj_to_copy: Entity) -> None:
-        if not cls.is_correct_type(obj_to_copy):
+    def validate(cls, obj: Entity) -> None:
+        if not cls.is_correct_type(obj):
             raise ValueError(
-                f"Expected instance of {cls.Meta.model}, got {obj_to_copy.__class__}"
+                f"Expected instance of {cls.Meta.model}, got {obj.__class__}"
             )
 
     @classmethod
-    def is_correct_type(cls, obj_to_copy: Entity) -> bool:
-        return isinstance(obj_to_copy, cls.Meta.model)
+    def is_correct_type(cls, obj: Entity) -> bool:
+        return isinstance(obj, cls.Meta.model)
 
     @classmethod
-    def clone(cls, obj_to_copy: Entity, registry: TwinlyRegistry) -> Entity:
+    def clone(cls, obj: Entity, registry: CloneCatRegistry) -> Entity:
         """Copies the instance."""
-        cls.validate(obj_to_copy)
+        cls.validate(obj)
 
-        hash_key = cls.inspector.get_hash_key(obj_to_copy)
+        hash_key = cls.inspector.get_hash_key(obj)
         if hash_key in registry:
             return registry[hash_key]
 
@@ -74,13 +74,9 @@ class Twinly(Generic[Entity], ABC):
         registry[hash_key] = new_obj
 
         # Copy attributes
-        for attr in cls.inspector.all_twinly_attributes:
-            new_value = attr.get_value(obj_to_copy, registry)
+        for attr in cls.inspector.all_clone_cat_attributes:
+            new_value = attr.get_value(obj, registry)
             if new_value is not NOT_SET:
                 setattr(new_obj, attr.name, new_value)
-
-        # Trigger post-generation function if exists.
-        if hasattr(cls, "__post_init__"):
-            cls.__post_init__(new_obj)
 
         return new_obj

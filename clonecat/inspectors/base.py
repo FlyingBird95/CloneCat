@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import TypeVar
 
 from ..attributes import Attribute
-from ..twinly import Twinly
+from ..clonecat import CloneCat
 
 AttributeType = TypeVar("AttributeType", bound=Attribute)
 
@@ -13,7 +13,7 @@ class Inspector(ABC):
     This is an internal utility class, and not intended to be used outside this package.
     """
 
-    def __init__(self, class_to_inspect: type[Twinly]):
+    def __init__(self, class_to_inspect: type[CloneCat]):
         self.meta_class = class_to_inspect.Meta
 
     @abstractmethod
@@ -22,8 +22,8 @@ class Inspector(ABC):
 
     @property
     @abstractmethod
-    def all_twinly_attributes(self) -> set[Attribute]:
-        """Returns all twinly attributes."""
+    def all_clone_cat_attributes(self) -> set[Attribute]:
+        """Returns all CloneCat attributes."""
 
     @staticmethod
     def get_hash_key(obj_to_clone: object) -> object:

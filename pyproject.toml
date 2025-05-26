@@ -1,14 +1,14 @@
 [project]
-name = "twinly"
+name = "clonecat"
 dynamic = ["version"]
-description = "Twinly is a Python library that creates perfect copies of your objects along with all their relationships. "
+description = "CloneCat is a Python framework that helps you create perfect clones of your objects along with all their relationships."
 readme = "README.md"
 authors = [
     { name = "Patrick" }
 ]
 requires-python = ">=3.9"
 dependencies = []
-keywords = ["clone", "copy", "deepcopy", "relations", "instances"]
+keywords = ["clone", "copy", "deepcopy", "relations", "instances", "sqlalchemy", "dataclasses", "pydantic", "django"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -44,16 +44,16 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/FlyingBird95/twinly"
-Documentation = "https://github.com/FlyingBird95/twinly#readme"
-Repository = "https://github.com/FlyingBird95/twinly.git"
-"Bug Tracker" = "https://github.com/FlyingBird95/twinly/issues"
+Homepage = "https://github.com/FlyingBird95/clonecat"
+Documentation = "https://github.com/FlyingBird95/clonecat#readme"
+Repository = "https://github.com/FlyingBird95/clonecat.git"
+"Bug Tracker" = "https://github.com/FlyingBird95/clonecat/issues"
 
 [tool.hatch.version]
-path = "twinly/__init__.py"
+path = "clonecat/__init__.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["twinly"]
+packages = ["clonecat"]
 
 [tool.black]
 line-length = 88
@@ -68,7 +68,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "--cov=twinly --cov-report=term-missing"
+addopts = "--cov=clonecat --cov-report=term-missing"
 
 [tool.mypy]
 python_version = "3.9"

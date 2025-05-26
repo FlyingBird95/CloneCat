@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
     paths-ignore:
-      - '../../twinly/__init__.py'  # Avoid infinite loops
+      - '../../clonecat/__init__.py'  # Avoid infinite loops
 
 jobs:
   bump-version:

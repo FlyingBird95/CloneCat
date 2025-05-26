@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Any, Callable, Generic, Optional, Union
 
-from .import_helper import import_copy_cat_class
-from .registry import TwinlyRegistry
-from .twinly import Twinly
+from .clonecat import CloneCat
+from .import_helper import import_clone_cat_class
+from .registry import CloneCatRegistry
 from .utils import NOT_SET, Entity
 
 
@@ -25,7 +25,7 @@ class Attribute(Generic[Entity], ABC):
         self.name = name
 
     @abstractmethod
-    def get_value(self, obj_to_copy: Entity, registry: TwinlyRegistry):
+    def get_value(self, obj: Entity, registry: CloneCatRegistry):
         """Get the value"""
 
 
@@ -38,8 +38,8 @@ class Copy(Attribute):
         Book.title = Copy()
     """
 
-    def get_value(self, obj_to_copy: Entity, registry: TwinlyRegistry) -> Any:
-        return getattr(obj_to_copy, self.name)
+    def get_value(self, obj: Entity, registry: CloneCatRegistry) -> Any:
+        return getattr(obj, self.name)
 
 
 class Clone(Attribute):
@@ -47,21 +47,23 @@ class Clone(Attribute):
 
     An example is when cloning a Book, then Book.author should be duplicated as well.
     This can be defined as:
-        author = Clone(CopyAuthor)
+        author = Clone(CloneAuthor)
 
     There are three usages:
 
     1. Use as a decorator:
         @Clone()
-        def author(self, registry: TwinlyRegistry):
+        def author(self, registry: CloneCatRegistry):
             ...
     2. Use as a class attribute using typing:
-        author = Clone(CopyAuthor)
-    3. Use an instance of a CopyClass:
-        author = Clone(Optional(CopyAuthor))
+        author = Clone(CloneAuthor)
+    3. Use an instance of a CloneCat class:
+        author = Clone(Optional(CloneAuthor))
     """
 
-    def __init__(self, inner_class: Union[type[Twinly], Optional[Twinly], str] = None):
+    def __init__(
+        self, inner_class: Union[type[CloneCat], Optional[CloneCat], str] = None
+    ):
         super().__init__()
         self._inner_class = inner_class
         self.getter_function = None
@@ -69,14 +71,14 @@ class Clone(Attribute):
     @property
     def inner_class(self):
         if isinstance(self._inner_class, str):
-            return import_copy_cat_class(self._inner_class)
+            return import_clone_cat_class(self._inner_class)
         return self._inner_class
 
-    def get_value(self, obj_to_copy, registry: TwinlyRegistry) -> None:
+    def get_value(self, obj, registry: CloneCatRegistry) -> None:
         if self.inner_class is not None:
-            obj_to_clone = getattr(obj_to_copy, self.name)
+            obj_to_clone = getattr(obj, self.name)
             return self.inner_class.clone(obj_to_clone, registry)
-        return self.getter_function(obj_to_copy, registry)
+        return self.getter_function(obj, registry)
 
     def __call__(self, getter_function: Callable):
         self.getter_function = getter_function
@@ -86,5 +88,5 @@ class Clone(Attribute):
 class Ignore(Attribute):
     """Use this class if you don't want to copy the attribute of the old object."""
 
-    def get_value(self, obj_to_copy: Entity, registry: TwinlyRegistry):
+    def get_value(self, obj: Entity, registry: CloneCatRegistry):
         return NOT_SET

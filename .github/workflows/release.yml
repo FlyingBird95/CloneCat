@@ -83,10 +83,10 @@ jobs:
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
 
-      - name: Extract version from twinly/__init__.py
+      - name: Extract version from clonecat/__init__.py
         id: get_version
         run: |
-          VERSION=$(sed -nE 's/^__version__ *= *"([^"]+)"/\1/p' twinly/__init__.py)
+          VERSION=$(sed -nE 's/^__version__ *= *"([^"]+)"/\1/p' clonecat/__init__.py)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Create GitHub Release
