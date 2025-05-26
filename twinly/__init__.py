@@ -8,7 +8,7 @@ from twinly.attributes import Clone
 from twinly.registry import TwinlyRegistry
 from twinly.twinly import Twinly
 
-__version__ = "0.1.13"
+__version__ = "0.1.14"
 __author__ = "Patrick"
 
 __all__ = [
