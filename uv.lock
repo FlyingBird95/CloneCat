@@ -323,6 +323,42 @@ wheels = [
 ]
 
 [[package]]
+name = "clonecat"
+source = { editable = "." }
+
+[package.optional-dependencies]
+dev = [
+    { name = "bandit" },
+    { name = "black" },
+    { name = "bump2version" },
+    { name = "flake8" },
+    { name = "isort" },
+    { name = "mypy" },
+    { name = "pre-commit" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "safety" },
+    { name = "sqlalchemy" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "bandit", marker = "extra == 'dev'", specifier = ">=1.7" },
+    { name = "black", marker = "extra == 'dev'", specifier = ">=22.0" },
+    { name = "bump2version", marker = "extra == 'dev'", specifier = ">=1.0" },
+    { name = "flake8", marker = "extra == 'dev'", specifier = ">=5.0" },
+    { name = "isort", marker = "extra == 'dev'", specifier = ">=5.0" },
+    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.0" },
+    { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=3.0" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.5" },
+    { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=4.0" },
+    { name = "safety", marker = "extra == 'dev'", specifier = ">=2.0" },
+    { name = "sqlalchemy", marker = "extra == 'dev'", specifier = ">=2.0.41" },
+]
+provides-extras = ["dev"]
+
+[[package]]
 name = "colorama"
 version = "0.4.6"
 source = { registry = "https://pypi.org/simple" }
@@ -1543,49 +1579,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/a8/4b/29b4ef32e036bb34e
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d0/30/dc54f88dd4a2b5dc8a0279bdd7270e735851848b762aeb1c1184ed1f6b14/tqdm-4.67.1-py3-none-any.whl", hash = "sha256:26445eca388f82e72884e0d580d5464cd801a3ea01e63e5601bdff9ba6a48de2", size = 78540, upload-time = "2024-11-24T20:12:19.698Z" },
 ]
-
-[[package]]
-name = "twinly"
-source = { editable = "." }
-
-[package.optional-dependencies]
-dev = [
-    { name = "bandit" },
-    { name = "black" },
-    { name = "bump2version" },
-    { name = "flake8" },
-    { name = "isort" },
-    { name = "mypy" },
-    { name = "pre-commit" },
-    { name = "pytest" },
-    { name = "pytest-cov" },
-    { name = "safety" },
-    { name = "sqlalchemy" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "pytest" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "bandit", marker = "extra == 'dev'", specifier = ">=1.7" },
-    { name = "black", marker = "extra == 'dev'", specifier = ">=22.0" },
-    { name = "bump2version", marker = "extra == 'dev'", specifier = ">=1.0" },
-    { name = "flake8", marker = "extra == 'dev'", specifier = ">=5.0" },
-    { name = "isort", marker = "extra == 'dev'", specifier = ">=5.0" },
-    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.0" },
-    { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=3.0" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0" },
-    { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=4.0" },
-    { name = "safety", marker = "extra == 'dev'", specifier = ">=2.0" },
-    { name = "sqlalchemy", marker = "extra == 'dev'", specifier = ">=2.0.41" },
-]
-provides-extras = ["dev"]
-
-[package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=8.3.5" }]
 
 [[package]]
 name = "typer"

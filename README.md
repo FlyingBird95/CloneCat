@@ -27,7 +27,7 @@ and which relations should be ignored.
 Additionally, CloneCat has built in validation that verifies that all relations in a dataclass are specified.
 When any attribute is left out, its corresponding CloneCat class cannot be used.
 
-Twinly works great with:
+CopyCat works great with:
 - [dataclasses](https://docs.python.org/3/library/dataclasses.html)
 - [SQLAlchemy](https://www.sqlalchemy.org/)
 - [Django models](https://docs.djangoproject.com/en/5.2/topics/db/models/)
