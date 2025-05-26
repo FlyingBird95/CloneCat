@@ -21,7 +21,7 @@ If applicable, add screenshots to help explain your problem.
 ## 🖥️ Environment
 - OS: [e.g. iOS]
 - Python Version: [e.g. 3.11]
-- CloneCat Version: [e.g. 0.1.14]
+- CloneCat Version: [e.g. 0.1.15]
 
 ## 📋 Additional Context
 Add any other context about the problem here.

@@ -8,7 +8,7 @@ from clonecat.attributes import Clone
 from clonecat.clonecat import CloneCat
 from clonecat.registry import CloneCatRegistry
 
-__version__ = "0.1.14"
+__version__ = "0.1.15"
 __author__ = "Patrick"
 
 __all__ = [
