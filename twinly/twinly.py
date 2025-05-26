@@ -66,11 +66,12 @@ class Twinly(Generic[Entity], ABC):
         """Copies the instance."""
         cls.validate(obj_to_copy)
 
-        if obj_to_copy in registry:
-            return registry[obj_to_copy]
+        hash_key = cls.inspector.get_hash_key(obj_to_copy)
+        if hash_key in registry:
+            return registry[hash_key]
 
         new_obj = cls.Meta.model()
-        registry[obj_to_copy] = new_obj
+        registry[hash_key] = new_obj
 
         # Copy attributes
         for attr in cls.inspector.all_twinly_attributes:

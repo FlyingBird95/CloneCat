@@ -1563,6 +1563,11 @@ dev = [
     { name = "sqlalchemy" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "bandit", marker = "extra == 'dev'", specifier = ">=1.7" },
@@ -1578,6 +1583,9 @@ requires-dist = [
     { name = "sqlalchemy", marker = "extra == 'dev'", specifier = ">=2.0.41" },
 ]
 provides-extras = ["dev"]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest", specifier = ">=8.3.5" }]
 
 [[package]]
 name = "typer"

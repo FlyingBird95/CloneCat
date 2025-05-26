@@ -24,3 +24,12 @@ class Inspector(ABC):
     @abstractmethod
     def all_twinly_attributes(self) -> set[Attribute]:
         """Returns all twinly attributes."""
+
+    @staticmethod
+    def get_hash_key(obj_to_clone: object) -> object:
+        """Given the instance to clone, return the hash of the instance.
+
+        When an object is not hashable,
+        this method can be overridden to return a unique hash key for an instance.
+        """
+        return obj_to_clone
